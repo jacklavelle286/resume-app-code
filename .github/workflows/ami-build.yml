@@ -21,6 +21,12 @@ jobs:
           unzip packer_1.7.0_linux_amd64.zip
           sudo mv packer /usr/local/bin/
 
+      # Install AWS CLI
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
       # Set up AWS credentials using GitHub Secrets
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -29,10 +35,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # Get latest AMI ID
+      - name: Get Latest AMI ID
+        id: get_ami
+        run: |
+          LATEST_AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=my-portfolio-ami-pipeline-image-*" --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
+          echo "LATEST_AMI=$LATEST_AMI" >> $GITHUB_ENV
+
       # Validate the Packer template
       - name: Validate Packer Template
-        run: packer validate packer-template.json
+        run: packer validate pipeline.packer-template.json
 
-      # Build the AMI
+      # Build the AMI with Packer
       - name: Build AMI with Packer
-        run: packer build packer-template.json
+        run: |
+          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline.packer-template.json
