@@ -39,7 +39,7 @@ jobs:
       - name: Get Latest AMI ID
         id: get_ami
         run: |
-          LATEST_AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=my-portfolio-ami-pipeline-image-initial" --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
+          LATEST_AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=my-portfolio-ami-pipeline-image-*" --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
           echo "LATEST_AMI=$LATEST_AMI"
           if [ -z "$LATEST_AMI" ]; then
             echo "No previous AMI found, using default AMI."
