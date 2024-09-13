@@ -1,0 +1,38 @@
+name: Build AMI on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_ami:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Packer
+      - name: Install Packer
+        run: |
+          curl -O https://releases.hashicorp.com/packer/1.7.0/packer_1.7.0_linux_amd64.zip
+          unzip packer_1.7.0_linux_amd64.zip
+          sudo mv packer /usr/local/bin/
+
+      # Set up AWS credentials using GitHub Secrets
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Validate the Packer template
+      - name: Validate Packer Template
+        run: packer validate packer-template.json
+
+      # Build the AMI
+      - name: Build AMI with Packer
+        run: packer build packer-template.json
