@@ -8,11 +8,9 @@
      "region": "us-east-1",
      "source_ami": "{{user `source_ami`}}",
      "instance_type": "t2.micro",
-     "iam_instance_profile": "ssm", 
+     "iam_instance_profile": "ssm",  
      "ami_name": "my-portfolio-ami-pipeline-image-{{timestamp}}",
-     "ssh_username": "root", 
-     "ssh_timeout": "10m",
-     "associate_public_ip_address": true 
+     "communicator": "ssm"
    }
  ],
  "provisioners": [
