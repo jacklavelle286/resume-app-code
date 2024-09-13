@@ -35,11 +35,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      # Get latest AMI ID
+      # Get latest AMI ID or fallback to default AMI
       - name: Get Latest AMI ID
         id: get_ami
         run: |
           LATEST_AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=my-portfolio-ami-pipeline-image-*" --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
+          echo "LATEST_AMI=$LATEST_AMI"
+          if [ -z "$LATEST_AMI" ]; then
+            echo "No previous AMI found, using default AMI."
+            LATEST_AMI="ami-057660df437592ff2"  # Fallback to a known good AMI if no previous one exists
+          fi
           echo "LATEST_AMI=$LATEST_AMI" >> $GITHUB_ENV
 
       # Validate the Packer template
@@ -49,4 +54,4 @@ jobs:
       # Build the AMI with Packer
       - name: Build AMI with Packer
         run: |
-          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline.packer-template.json
+          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline/packer-template.json
