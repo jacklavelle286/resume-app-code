@@ -47,11 +47,8 @@ jobs:
           fi
           echo "LATEST_AMI=$LATEST_AMI" >> $GITHUB_ENV
 
-      # Validate the Packer template
+      # Validate the Packer template with default source_ami
       - name: Validate Packer Template
-        run: packer validate pipeline/packer-template.json
+        run: packer validate -var "source_ami=ami-057660df437592ff2" pipeline/packer-template.json
 
-      # Build the AMI with Packer
-      - name: Build AMI with Packer
-        run: |
-          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline/packer-template.json
+      # Build the AMI with Packer using dynamic LATEST
