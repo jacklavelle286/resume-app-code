@@ -44,7 +44,7 @@ jobs:
 
       # Validate the Packer template
       - name: Validate Packer Template
-        run: packer validate pipeline.packer-template.json
+        run: packer validate pipeline/packer-template.json
 
       # Build the AMI with Packer
       - name: Build AMI with Packer
