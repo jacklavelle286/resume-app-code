@@ -8,8 +8,8 @@
      "region": "us-east-1",
      "source_ami": "{{user `source_ami`}}",  
      "instance_type": "t2.micro",
-     "ssh_username": "root",
-     "ami_name": "my-portfolio-ami-pipeline-image-{{timestamp}}"
+     "ssh_username": "root", 
+     "ami_name": "my-portfolio-ami-pipeline-image-{{timestamp}}" 
    }
  ],
  "provisioners": [
@@ -30,7 +30,7 @@
    {
      "type": "shell",
      "inline": [
-       "sudo chown -R ec2-user:ec2-user /var/www/html",
+       "sudo chown -R root:root /var/www/html",  
        "sudo systemctl restart httpd"
      ]
    }
