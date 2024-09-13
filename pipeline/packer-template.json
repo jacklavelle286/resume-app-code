@@ -11,7 +11,8 @@
      "iam_instance_profile": "ssm",  
      "ami_name": "my-portfolio-ami-pipeline-image-{{timestamp}}",
      "communicator": "ssh",
-     "ssh_interface": "session_manager"
+     "ssh_interface": "session_manager",
+     "ssh_username": "root"
    }
  ],
  "provisioners": [
