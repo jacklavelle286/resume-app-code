@@ -9,7 +9,7 @@
      "source_ami": "{{user `source_ami`}}",  
      "instance_type": "t2.micro",
      "ssh_username": "ec2-user",
-     "ami_name": "my-portfolio-ami-pipeline-image-initial"
+     "ami_name": "my-portfolio-ami-pipeline-image-{{timestamp}}"
    }
  ],
  "provisioners": [
