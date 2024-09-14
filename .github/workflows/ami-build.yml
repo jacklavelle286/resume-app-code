@@ -53,7 +53,7 @@ jobs:
         run: |
           LATEST_AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=my-portfolio-ami-pipeline-image-*" --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
           echo "LATEST_AMI=$LATEST_AMI"
-          if [ -z "$LATEST_AMI" ] || [ "$LATEST_AMI" = "None" ]; then
+          if [ -z "$LATEST_AMI" ] || [ "$LATEST_AMI" = "None" ] || [ "$LATEST_AMI" = "null" ]; then
             echo "No previous AMI found, using default AMI."
             LATEST_AMI="ami-057660df437592ff2"  # Replace with a valid default AMI ID
           fi
@@ -62,16 +62,16 @@ jobs:
       # Initialize Packer (install plugins)
       - name: Initialize Packer
         run: |
-          PACKER_LOG=1 packer init pipeline/packer-template.pkr.hcl
+          PACKER_LOG=1 packer init packer-template.pkr.hcl
 
       # Validate the Packer template
       - name: Validate Packer Template
         run: |
-          packer validate -var "source_ami=ami-057660df437592ff2" -var "template_dir=$PWD" pipeline/packer-template.pkr.hcl
+          packer validate -var "source_ami=ami-057660df437592ff2" -var "template_dir=$PWD" packer-template.pkr.hcl
 
       # Build the AMI with Packer
       - name: Build AMI with Packer
         env:
           PACKER_LOG: 1  # Enable detailed Packer logging
         run: |
-          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline/packer-template.pkr.hcl
+          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" packer-template.pkr.hcl
