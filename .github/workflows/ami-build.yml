@@ -11,7 +11,7 @@ jobs:
   build_ami:
     runs-on: ubuntu-latest
     env:
-      LAUNCH_TEMPLATE_ID: lt-01e9ab7bca374ee10  # <-- Variable for Launch Template ID
+      LAUNCH_TEMPLATE_ID: lt-0ac35f5d43457f42e  # <-- Variable for Launch Template ID
 
     steps:
       # Checkout the code
