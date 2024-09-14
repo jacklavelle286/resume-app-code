@@ -1,6 +1,6 @@
 # GitHub Actions Workflow: .github/workflows/ami-build.yml
 
-name: Build AMI on Push
+name: Build AMI and Update Launch Template
 
 on:
   push:
@@ -12,11 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Print Working Directory and List Files (for debugging)
       - name: Print Working Directory
         run: pwd
 
@@ -26,23 +24,19 @@ jobs:
       - name: List Pipeline Directory Files
         run: ls -la pipeline
 
-      # Set up Packer
       - name: Set up Packer
         uses: hashicorp/setup-packer@v2
         with:
-          version: '1.11.2'  # Use the desired Packer version
+          version: '1.11.2'
 
-      # Verify Packer Version
       - name: Verify Packer Version
         run: packer version
 
-      # Install AWS CLI and jq
       - name: Install AWS CLI and jq
         run: |
           sudo apt-get update
           sudo apt-get install -y awscli jq
 
-      # Configure AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -50,7 +44,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      # Get the latest AMI ID or use a default AMI
       - name: Get Latest AMI ID
         id: get_ami
         run: |
@@ -62,19 +55,26 @@ jobs:
           fi
           echo "LATEST_AMI=$LATEST_AMI" >> $GITHUB_ENV
 
-      # Initialize Packer (install plugins)
       - name: Initialize Packer
         run: |
           PACKER_LOG=1 packer init pipeline/packer-template.pkr.hcl
 
-      # Validate the Packer template
       - name: Validate Packer Template
         run: |
           packer validate -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD/pipeline" pipeline/packer-template.pkr.hcl
 
-      # Build the AMI with Packer
       - name: Build AMI with Packer
+        id: build_ami
         env:
-          PACKER_LOG: 1  # Enable detailed Packer logging
+          PACKER_LOG: 1
         run: |
-          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD/pipeline" pipeline/packer-template.pkr.hcl
+          packer build -machine-readable -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD/pipeline" pipeline/packer-template.pkr.hcl | tee build.log
+          AMI_ID=$(awk -F, '/artifact,0,id/ {print $6}' build.log | cut -d ':' -f2)
+          echo "AMI_ID=$AMI_ID"
+          echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
+
+      - name: Update Launch Template
+        run: |
+          aws ec2 create-launch-template-version --launch-template-id lt-07cad2dbc789f2e04 --version-description "New version with AMI ${{ env.AMI_ID }}" --launch-template-data "{\"ImageId\":\"${{ env.AMI_ID }}\"}"
+          # Optionally set this version as the default version
+          aws ec2 modify-launch-template --launch-template-id lt-07cad2dbc789f2e04 --default-version '$Latest'

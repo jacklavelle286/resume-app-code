@@ -32,7 +32,7 @@ source "amazon-ebs" "portfolio_ami" {
   region               = "us-east-1"
   source_ami           = var.source_ami
   instance_type        = "t2.micro"
-  iam_instance_profile = "ssm"
+  iam_instance_profile = "ssm"  # Ensure this IAM role exists with proper permissions
 
   # AMI settings
   ami_name             = "my-portfolio-ami-pipeline-image-{{timestamp}}"
@@ -61,7 +61,7 @@ build {
     ]
   }
 
-  # **Create the temp directory before uploading files**
+  # Create the temp directory before uploading files
   provisioner "shell" {
     inline = [
       "mkdir -p /home/ec2-user/temp_website_files/"
