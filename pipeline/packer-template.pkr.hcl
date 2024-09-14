@@ -63,7 +63,7 @@ build {
 
   # Copy website files to the instance
   provisioner "file" {
-    source      = "${var.template_dir}/website-files/"
+    source      = "${var.template_dir}/pipeline/website-files/"
     destination = "/var/www/html/"
   }
 
