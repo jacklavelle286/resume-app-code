@@ -8,13 +8,23 @@
      "region": "us-east-1",
      "source_ami": "{{user `source_ami`}}",
      "instance_type": "t2.micro",
-     "iam_instance_profile": "ssm", 
+     "iam_instance_profile": "ssm",  
      "ami_name": "my-portfolio-ami-pipeline-image-{{timestamp}}",
-     "communicator": "ssm",  
-     "associate_public_ip_address": true
+     "communicator": "ssh",
+     "ssh_interface": "session_manager", 
+     "ssh_username": "ec2-user", 
+     "ssh_timeout": "10m"
    }
  ],
  "provisioners": [
+   {
+     "type": "shell",
+     "inline": [
+       "sudo yum install -y amazon-ssm-agent",
+       "sudo systemctl start amazon-ssm-agent",
+       "sudo systemctl enable amazon-ssm-agent"
+     ]
+   },
    {
      "type": "shell",
      "inline": [
@@ -32,7 +42,7 @@
    {
      "type": "shell",
      "inline": [
-       "sudo chown -R root:root /var/www/html",
+       "sudo chown -R ec2-user:ec2-user /var/www/html",
        "sudo systemctl restart httpd"
      ]
    }
