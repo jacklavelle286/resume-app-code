@@ -61,7 +61,14 @@ build {
     ]
   }
 
-  # Upload website files to a temporary directory
+  # **Create the temp directory before uploading files**
+  provisioner "shell" {
+    inline = [
+      "mkdir -p /home/ec2-user/temp_website_files/"
+    ]
+  }
+
+  # Upload website files to the temporary directory
   provisioner "file" {
     source      = "${var.template_dir}/website-files/"
     destination = "/home/ec2-user/temp_website_files/"
