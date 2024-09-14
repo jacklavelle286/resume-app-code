@@ -61,16 +61,18 @@ build {
     ]
   }
 
-  # Copy website files to the instance
+  # Upload website files to a temporary directory
   provisioner "file" {
-    source      = "${var.template_dir}/pipeline/website-files/"
-    destination = "/var/www/html/"
+    source      = "${var.template_dir}/website-files/"
+    destination = "/home/ec2-user/temp_website_files/"
   }
 
-  # Set ownership and restart Apache
+  # Move files to /var/www/html/ and set ownership
   provisioner "shell" {
     inline = [
+      "sudo cp -r /home/ec2-user/temp_website_files/* /var/www/html/",
       "sudo chown -R ec2-user:ec2-user /var/www/html",
+      "sudo rm -rf /home/ec2-user/temp_website_files",
       "sudo systemctl restart httpd"
     ]
   }
