@@ -1,4 +1,18 @@
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 1.0.0"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
+
 variable "source_ami" {
+  type    = string
+  default = ""
+}
+
+variable "template_dir" {
   type    = string
   default = ""
 }
@@ -9,7 +23,6 @@ source "amazon-ebs" "portfolio_ami" {
   instance_type        = "t2.micro"
   iam_instance_profile = "ssm"
   ami_name             = "my-portfolio-ami-pipeline-image-{{timestamp}}"
-
   communicator         = "ssm"
 }
 
