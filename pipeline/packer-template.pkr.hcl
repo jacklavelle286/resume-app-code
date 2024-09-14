@@ -1,4 +1,4 @@
-# Packer Template: packer-template.pkr.hcl
+# Packer Template: pipeline/packer-template.pkr.hcl
 
 # Required plugins block
 packer {
