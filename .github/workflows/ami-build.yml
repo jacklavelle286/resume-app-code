@@ -14,11 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Verify Working Directory and Files
+      - name: Print Working Directory
+        run: pwd
+
+      - name: List Files
+        run: ls -la
+
       # Set up Packer
       - name: Set up Packer
         uses: hashicorp/setup-packer@v2
         with:
-          version: '1.11.2'  # Use the latest version or specify the version you need
+          version: '1.11.2'
 
       # Verify Packer Version
       - name: Verify Packer Version
@@ -50,9 +57,13 @@ jobs:
           fi
           echo "LATEST_AMI=$LATEST_AMI" >> $GITHUB_ENV
 
+      # Format Packer Template
+      - name: Format Packer Template
+        run: packer fmt -check pipeline/packer-template.pkr.hcl
+
       # Initialize Packer (install plugins)
       - name: Initialize Packer
-        run: packer init pipeline/packer-template.pkr.hcl
+        run: packer init -debug pipeline/packer-template.pkr.hcl
 
       # Validate the Packer template
       - name: Validate Packer Template
