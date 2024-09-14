@@ -52,15 +52,15 @@ jobs:
 
       # Initialize Packer (install plugins)
       - name: Initialize Packer
-        run: packer init pipeline.packer-template.json
+        run: packer init pipeline/packer-template.json
 
       # Validate the Packer template
       - name: Validate Packer Template
-        run: packer validate -var "source_ami=ami-057660df437592ff2" pipeline.packer-template.json
+        run: packer validate -var "source_ami=ami-057660df437592ff2" pipeline/packer-template.json
 
       # Build the AMI with Packer
       - name: Build AMI with Packer
         env:
           PACKER_LOG: 1  # Enable detailed Packer logging
         run: |
-          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline.packer-template.json
+          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline/packer-template.json
