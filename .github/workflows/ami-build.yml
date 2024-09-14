@@ -14,12 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install Packer
-      - name: Install Packer
-        run: |
-          curl -O https://releases.hashicorp.com/packer/1.7.8/packer_1.7.8_linux_amd64.zip
-          unzip packer_1.7.8_linux_amd64.zip
-          sudo mv packer /usr/local/bin/
+      # Set up Packer
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v2
+        with:
+          packer_version: '1.9.4'  # Specify the latest version
 
       # Verify Packer Version
       - name: Verify Packer Version
@@ -29,7 +28,7 @@ jobs:
       - name: Install AWS CLI
         run: |
           sudo apt-get update
-          sudo apt-get install -y awscli
+          sudo apt-get install -y awscli jq
 
       # Set up AWS credentials using GitHub Secrets
       - name: Configure AWS Credentials
@@ -45,7 +44,7 @@ jobs:
         run: |
           LATEST_AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=my-portfolio-ami-pipeline-image-*" --query "Images | sort_by(@, &CreationDate)[-1].ImageId" --output text)
           echo "LATEST_AMI=$LATEST_AMI"
-          if [ -z "$LATEST_AMI" ]; then
+          if [ -z "$LATEST_AMI" ] || [ "$LATEST_AMI" = "None" ]; then
             echo "No previous AMI found, using default AMI."
             LATEST_AMI="ami-057660df437592ff2"  # Fallback to a known good AMI if no previous one exists
           fi
@@ -53,11 +52,11 @@ jobs:
 
       # Validate the Packer template with default source_ami
       - name: Validate Packer Template
-        run: packer validate -var "source_ami=ami-057660df437592ff2" pipeline/packer-template.json
+        run: packer validate -var "source_ami=ami-057660df437592ff2" pipeline.packer-template.json
 
       # Build the AMI with Packer using dynamic LATEST_AMI and enable detailed logging
       - name: Build AMI with Packer
         env:
           PACKER_LOG: 1  # Enable detailed Packer logging
         run: |
-          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline/packer-template.json
+          packer build -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD" pipeline.packer-template.json
