@@ -11,22 +11,34 @@ jobs:
   build_ami:
     runs-on: ubuntu-latest
     env:
-      LAUNCH_TEMPLATE_ID: lt-0ac35f5d43457f42e  # <-- Variable for Launch Template ID
+      LAUNCH_TEMPLATE_ID: lt-01e9ab7bca374ee10  # Variable for Launch Template ID
 
     steps:
       # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
-      # Print Working Directory and List Files (for debugging)
+      # Print Working Directory
       - name: Print Working Directory
         run: pwd
 
+      # List Root Directory Files
       - name: List Root Directory Files
         run: ls -la
 
+      # List Pipeline Directory Files
       - name: List Pipeline Directory Files
         run: ls -la pipeline
+
+      # List Website Files
+      - name: List Website Files
+        run: ls -la pipeline/website-files
+
+      # Display index.html Content
+      - name: Display index.html Content
+        run: cat pipeline/website-files/index.html
 
       # Set up Packer
       - name: Set up Packer
@@ -64,23 +76,23 @@ jobs:
           fi
           echo "LATEST_AMI=$LATEST_AMI" >> $GITHUB_ENV
 
-      # Initialize Packer (install plugins)
+      # Initialize Packer
       - name: Initialize Packer
         run: |
           PACKER_LOG=1 packer init pipeline/packer-template.pkr.hcl
 
-      # Validate the Packer template
+      # Validate Packer Template
       - name: Validate Packer Template
         run: |
           packer validate -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD/pipeline" pipeline/packer-template.pkr.hcl
 
-      # Build the AMI with Packer and capture the new AMI ID
+      # Build AMI with Packer
       - name: Build AMI with Packer
-        id: build_ami  # Add an ID to reference outputs
+        id: build_ami
         env:
           PACKER_LOG: 1
         run: |
-          packer build -machine-readable -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD/pipeline" pipeline/packer-template.pkr.hcl | tee build.log
+          packer build -force -machine-readable -var "source_ami=${{ env.LATEST_AMI }}" -var "template_dir=$PWD/pipeline" pipeline/packer-template.pkr.hcl | tee build.log
           AMI_ID=$(awk -F, '/artifact,0,id/ {print $6}' build.log | cut -d ':' -f2)
           echo "AMI_ID=$AMI_ID"
           echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
@@ -90,9 +102,10 @@ jobs:
         run: |
           aws ec2 create-launch-template-version \
             --launch-template-id ${{ env.LAUNCH_TEMPLATE_ID }} \
+            --source-version '$Default' \
             --version-description "New version with AMI ${{ env.AMI_ID }}" \
             --launch-template-data "{\"ImageId\":\"${{ env.AMI_ID }}\"}"
-          # Optionally set this version as the default version
+          # Set this version as the default version
           aws ec2 modify-launch-template \
             --launch-template-id ${{ env.LAUNCH_TEMPLATE_ID }} \
             --default-version '$Latest'
