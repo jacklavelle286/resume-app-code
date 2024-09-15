@@ -1,6 +1,6 @@
 body {
     font-family: 'Courier New', Courier, monospace;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
 }
 
 .navbar {
@@ -171,4 +171,22 @@ section {
 
 .dark-mode #spinner-container {
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Hover behavior for light mode */
+.nav-link:hover {
+    color: #ffffff;
+    background-color: inherit;
+}
+
+.section-button:hover {
+    color: #ffffff;
+    background-color: inherit;
+}
+
+/* Dark Mode hover adjustments */
+.dark-mode .nav-link:hover,
+.dark-mode .section-button:hover {
+    color: #ffffff;
+    background-color: inherit;
 }
