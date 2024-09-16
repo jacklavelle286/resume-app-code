@@ -39,7 +39,10 @@
     <div class="container text-center">
         <header>
             <h1 class="my-4">AWS Latest News &#128240</h1>
-            <p>You can check back at this site everyday and see the latest news released from AWS. This can cover new services, blog posts, recommendations and everything in between.</p>
+            <p>You can check back at this site everyday and see the latest news released from AWS. This can cover new services, 
+              blog posts, recommendations and everything in between. This page uses AWS Lambda and Amazon EventBridge to grab 
+              the latest AWS blog posts using the RSS feed using an RSS feed parser, and updating a DynamoDB table which is 
+              used to populate the webpage upon refresh.</p>
         </header>
 
 
