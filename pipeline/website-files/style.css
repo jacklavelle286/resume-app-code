@@ -190,3 +190,91 @@ section {
     color: #ffffff;
     background-color: inherit;
 }
+
+
+/* Add styles for the profile picture */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.profile-pic {
+    border-radius: 20%;
+    width: 200px; /* Adjust the size as needed */
+    transition: transform 0.3s;
+}
+
+.profile-pic:hover {
+    transform: scale(1.1); /* Adds a hover effect to the image */
+}
+
+
+/* Certification section styles */
+.certification-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusts based on screen size */
+    gap: 20px; /* Space between the grid items */
+    justify-items: center; /* Center align each item horizontally */
+    margin: 20px;
+}
+
+.certification {
+    text-align: center; /* Center align text and image */
+}
+
+.certification-badge {
+    width: 150px; /* Size of the badge */
+    height: auto;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover transformation: scale and subtle shine effect */
+.certification-badge:hover {
+    transform: scale(1.1); /* Slightly enlarges the badge */
+    filter: brightness(1.2); /* Brightens the badge slightly */
+}
+
+/* Create the shiny effect */
+.certification-badge::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+    transition: all 0.3s ease-in-out;
+    transform: rotate(45deg);
+    opacity: 0;
+}
+
+.certification-badge:hover::before {
+    animation: shine 1s ease-in-out;
+    opacity: 1;
+}
+
+/* Keyframes for the shiny effect */
+@keyframes shine {
+    0% {
+        top: -100%;
+        left: -100%;
+    }
+    50% {
+        top: 100%;
+        left: 100%;
+    }
+    100% {
+        top: 100%;
+        left: 100%;
+    }
+}
+
+.certification h3 {
+    font-size: 1em;
+    color: #333;
+    margin-top: 10px;
+}
