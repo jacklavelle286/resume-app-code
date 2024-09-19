@@ -1,280 +1,283 @@
+/* Global Styles */
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 0;
+    margin: 0;
 }
 
-.navbar {
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.navbar-nav {
-    width: 100%;
-    justify-content: space-around;
-}
-
-.nav-item {
-    flex-grow: 1;
-    text-align: center;
-}
-
-.nav-link {
-    font-size: 2em;
-    color: #000000;
-    background-color: #ffffff;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.nav-link:hover {
-    color: #ffffff;
-    background-color: #000000;
-}
-
-.container {
-    max-width: 800px;
-}
-
-section {
-    justify-content: center;
-}
-
-.section-button {
-    width: 100%;
-    background-color: #ffffff;
-    color: #000000;
-    border: none;
-    padding: 10px;
-    font-size: 20px;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.section-button:hover {
-    background-color: #000000;
-    color: #ffffff;
-}
-
-#blog-posts,
-#comments,
-#view-counter {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-#posts-container,
-#comments-container,
-#counter-container {
-    margin-top: 10px;
-    padding: 20px;
-}
-
-#comment-form-container,
-#contact-form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-#comment-form,
-#contact-form {
-    width: 80%;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#comment-form textarea,
-.form-input,
-.form-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#comment-form button,
-.form-button {
-    background-color: #ffffff;
-    border: none;
-    color: #000000;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-#comment-form button:hover,
-.form-button:hover {
-    background-color: #000000;
-    color: #ffffff;
-}
-
-#spinner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Dark Mode Styles */
-.dark-mode {
+/* Dark mode styles */
+body.dark-mode {
     background-color: #121212;
     color: #ffffff;
 }
 
-.dark-mode .section-button,
-.dark-mode .form-button {
-    color: #ffffff;
-    background-color: #333333;
+.navbar-darkmode {
+    background-color: #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.8em;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.dark-mode .section-button:hover,
-.dark-mode .form-button:hover {
-    background-color: #4d4d4d;
-}
-
-.dark-mode #blog-posts,
-.dark-mode #comments,
-.dark-mode #view-counter,
-.dark-mode #posts-container,
-.dark-mode #comments-container,
-.dark-mode #counter-container,
-.dark-mode #comment-form-container,
-.dark-mode #contact-form-container {
-    border-color: #444444;
-}
-
-.dark-mode #comment-form textarea,
-.dark-mode .form-input,
-.dark-mode .form-textarea {
-    background-color: #333333;
-    color: #ffffff;
-    border-color: #444444;
-}
-
-.dark-mode #spinner-container {
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Hover behavior for light mode */
-.nav-link:hover {
-    color: #ffffff;
-    background-color: inherit;
-}
-
-.section-button:hover {
-    color: #ffffff;
-    background-color: inherit;
-}
-
-/* Dark Mode hover adjustments */
-.dark-mode .nav-link:hover,
-.dark-mode .section-button:hover {
-    color: #ffffff;
-    background-color: inherit;
-}
-
-
-/* Add styles for the profile picture */
-.profile-container {
+/* Navbar */
+.navbar {
+    background-color: #ffffff;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    align-items: center;
+}
+
+/* Keep the navbar text black in dark mode */
+.navbar.dark-mode {
+    background-color: #333;
+}
+
+.navbar-nav {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.nav-link {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 10px;
+    color: #333; /* Keep text black */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Navbar Hover Effect */
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* Dark Mode Navbar keeps links black */
+body.dark-mode .nav-link {
+    color: #000;
+}
+
+body.dark-mode .nav-link:hover {
+    color: #333;
+}
+
+/* Main Section */
+.shadcn-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Standard Box Style */
+.content-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+/* Dark Mode Content Box */
+body.dark-mode .content-box {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Certification Container Styles */
+.certification-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    grid-gap: 20px;
+    justify-items: center;
+    padding: 20px;
+}
+
+/* Certification Item */
+.certification {
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.certification:hover {
+    transform: scale(1.05); /* Slight zoom effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add slight shadow on hover */
+}
+
+/* Certification Badge Styles */
+.certification-badge {
+    width: 100px;
+    transition: box-shadow 0.3s ease;
+}
+
+.certification-badge:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* Shine effect on hover */
+}
+
+/* Certification Title */
+.certification-title {
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+/* Profile Picture Styles */
+.profile-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
 }
 
 .profile-pic {
-    border-radius: 20%;
-    width: 200px; /* Adjust the size as needed */
+    border-radius: 50%;
+    width: 150px;
     transition: transform 0.3s;
 }
 
 .profile-pic:hover {
-    transform: scale(1.1); /* Adds a hover effect to the image */
+    transform: scale(1.1);
 }
 
-
-/* Certification section styles */
-.certification-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusts based on screen size */
-    gap: 20px; /* Space between the grid items */
-    justify-items: center; /* Center align each item horizontally */
-    margin: 20px;
+/* Buttons */
+.shadcn-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
-.certification {
-    text-align: center; /* Center align text and image */
+.shadcn-button:hover {
+    background-color: #218838;
 }
 
-.certification-badge {
-    width: 150px; /* Size of the badge */
-    height: auto;
-    margin-bottom: 10px;
-    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-    position: relative;
-    overflow: hidden;
+/* Dark Mode Button */
+body.dark-mode .shadcn-button {
+    background-color: #1b5e20;
 }
 
-/* Hover transformation: scale and subtle shine effect */
-.certification-badge:hover {
-    transform: scale(1.1); /* Slightly enlarges the badge */
-    filter: brightness(1.2); /* Brightens the badge slightly */
+body.dark-mode .shadcn-button:hover {
+    background-color: #156017;
 }
 
-/* Create the shiny effect */
-.certification-badge::before {
-    content: "";
-    position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
-    transition: all 0.3s ease-in-out;
-    transform: rotate(45deg);
-    opacity: 0;
+/* Centering the buttons */
+.centered-section {
+    display: flex;
+    justify-content: center;
 }
 
-.certification-badge:hover::before {
-    animation: shine 1s ease-in-out;
-    opacity: 1;
+/* View Counter Section */
+.view-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
-/* Keyframes for the shiny effect */
-@keyframes shine {
-    0% {
-        top: -100%;
-        left: -100%;
-    }
-    50% {
-        top: 100%;
-        left: 100%;
-    }
-    100% {
-        top: 100%;
-        left: 100%;
-    }
-}
-
-.certification h3 {
-    font-size: 1em;
+.shadcn-counter {
+    font-size: 1.2em;
     color: #333;
     margin-top: 10px;
+}
+
+/* Dark Mode View Counter */
+body.dark-mode .shadcn-counter {
+    color: #fff;
+}
+
+/* Contact Form */
+.shadcn-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.shadcn-input, .shadcn-textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Dark Mode Input and Textarea */
+body.dark-mode .shadcn-input, body.dark-mode .shadcn-textarea {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.shadcn-textarea {
+    height: 100px;
+    resize: vertical;
+    text-align: center;
+}
+
+/* Footer */
+.shadcn-footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+}
+
+.shadcn-footer p {
+    margin: 0;
+    color: #6c757d;
+}
+
+/* Dark Mode Footer */
+body.dark-mode .shadcn-footer {
+    background-color: #222;
+    color: #fff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+    }
+
+    .nav-link {
+        padding: 10px 0;
+        text-align: center;
+        font-size: 1.3em;
+    }
+
+    .navbar-darkmode {
+        margin: 10px auto;
+    }
 }
